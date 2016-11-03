@@ -24,17 +24,11 @@ module.exports.resolve = function resolve(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
   var modulePath;
 
-  try {
-    modulePath = join(yarnGlobalFolder(), request);
-    req(modulePath);
-    return modulePath;
-  } catch (err) {}
+  modulePath = join(yarnGlobalFolder(), request);
+  if (isReadableFolder(modulePath)) return modulePath;
 
-  try {
-    modulePath = join(npmGlobalFolder(), request);
-    req(modulePath);
-    return modulePath;
-  } catch (err) {}
+  modulePath = join(npmGlobalFolder(), request);
+  if (isReadableFolder(modulePath)) return modulePath;
 
   throw new Error("Cannot find module: '" + request + "'");
 };
