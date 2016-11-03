@@ -17,7 +17,7 @@ module.exports = function requireglobal(request) {
     return req(join(npmGlobalFolder(), request));
   } catch (err) {}
 
-  throw new Error("Cannot find global module: '" + request + "'");
+  throw new Error("Cannot find module: '" + request + "'");
 };
 
 module.exports.resolve = function resolve(request) {
@@ -36,34 +36,12 @@ module.exports.resolve = function resolve(request) {
     return modulePath;
   } catch (err) {}
 
-  throw new Error("Cannot find global module: '" + request + "'");
+  throw new Error("Cannot find module: '" + request + "'");
 };
 
 function req(dir) {
-  if (!isReadableDirectory(dir)) throw new Error();
+  if (!isReadableFolder(dir)) throw new Error();
   return require(dir);
-}
-
-function isReadableDirectory(path) {
-  try {
-    fs.accessSync(path, fs.constants.R_OK);
-  } catch (err) {
-    return false;
-  }
-  try {
-    var stat = fs.statSync(path);
-    if (stat.isDirectory()) {
-      return true;
-    }
-  } catch (err) {
-    return false;
-  }
-  return false;
-}
-
-function isValidRequest(request) {
-  var result = validate(request);
-  return result.validForNewPackages || result.validForOldPackages;
 }
 
 // for npm, we can simply parse the global module folder from its help message
@@ -78,7 +56,7 @@ function npmGlobalFolder() {
 
 // yarn pretty much hardcodes the global module folder, we mostly replicate the
 // checks from https://github.com/yarnpkg/yarn/blob/master/src/constants.js to
-// resolve the global path in a similar fashion like they do
+// resolve the global folder in a similar fashion like they do
 function yarnGlobalFolder() {
   var result = exec("yarn --version");
   if (/^v?\d+\.\d+\.\d+/gm.test(result.stdout.trim())) {
@@ -91,4 +69,21 @@ function yarnGlobalFolder() {
     }
     return join(userHome, ".yarn-config", "global", "node_modules");
   }
+}
+
+function isReadableFolder(path) {
+  try {
+    fs.accessSync(path, fs.constants.R_OK);
+  } catch (err) { return false; }
+  try {
+    if (fs.statSync(path).isDirectory()) {
+      return true;
+    }
+  } catch (err) { return false; }
+  return false;
+}
+
+function isValidRequest(request) {
+  var result = validate(request);
+  return result.validForNewPackages || result.validForOldPackages;
 }
