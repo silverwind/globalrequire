@@ -8,13 +8,16 @@ var validate = require("validate-npm-package-name");
 
 module.exports = function requireglobal(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
+  var modulePath;
 
+  modulePath = join(yarnGlobalFolder(), request);
   try {
-    return req(join(yarnGlobalFolder(), request));
+    return require(modulePath);
   } catch (err) {}
 
+  modulePath = join(npmGlobalFolder(), request);
   try {
-    return req(join(npmGlobalFolder(), request));
+    return require(modulePath);
   } catch (err) {}
 
   throw new Error("Cannot find module: '" + request + "'");
@@ -32,11 +35,6 @@ module.exports.resolve = function resolve(request) {
 
   throw new Error("Cannot find module: '" + request + "'");
 };
-
-function req(dir) {
-  if (!isReadableFolder(dir)) throw new Error();
-  return require(dir);
-}
 
 // for npm, we extract the global folder from its config files
 function npmGlobalFolder() {
