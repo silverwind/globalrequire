@@ -36,18 +36,8 @@ module.exports.resolve = function resolve(request) {
   throw new Error("Cannot find module: '" + request + "'");
 };
 
-// for npm, we extract the global folder from its config files
-function npmGlobalFolder() {
-  var prefix = rc("npm").prefix;
-  if (process.platform === "win32") {
-    prefix = prefix || join(process.env.APPDATA, "npm");
-  }
-  return join(prefix, "lib", "node_modules");
-}
-
-// yarn pretty much hardcodes the global module folder, we mostly replicate the
-// checks from https://github.com/yarnpkg/yarn/blob/master/src/constants.js to
-// resolve the global folder in a similar fashion like they do
+// for yarn we replicate the checks from
+// https://github.com/yarnpkg/yarn/blob/master/src/constants.js to
 function yarnGlobalFolder() {
   var userHome = require("user-home");
   if (process.platform === "linux" && process.env.USER === "root") {
@@ -57,6 +47,15 @@ function yarnGlobalFolder() {
     return join(process.env.LOCALAPPDATA, "Yarn", "global", "node_modules");
   }
   return join(userHome, ".yarn-config", "global", "node_modules");
+}
+
+// for npm, we extract the global folder from its config files
+function npmGlobalFolder() {
+  var prefix = rc("npm").prefix;
+  if (process.platform === "win32") {
+    prefix = prefix || join(process.env.APPDATA, "npm");
+  }
+  return join(prefix, "lib", "node_modules");
 }
 
 function isReadableFolder(path) {
