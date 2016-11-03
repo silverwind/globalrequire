@@ -37,7 +37,7 @@ module.exports.resolve = function resolve(request) {
 };
 
 // for yarn we replicate the checks from
-// https://github.com/yarnpkg/yarn/blob/master/src/constants.js to
+// https://github.com/yarnpkg/yarn/blob/master/src/constants.js
 function yarnGlobalFolder() {
   var userHome = require("user-home");
   if (process.platform === "linux" && process.env.USER === "root") {
