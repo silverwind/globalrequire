@@ -1,0 +1,28 @@
+{
+  "name": "globalrequire",
+  "version": "0.1.0",
+  "description": "require() globally installed modules",
+  "author": "silverwind <me@silverwind.io>",
+  "repository": "silverwind/globalrequire",
+  "license": "BSD-2-Clause",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "execa": "^0.5.0",
+    "user-home": "^2.0.0",
+    "validate-npm-package-name": "^2.2.2"
+  },
+  "files": [
+    "index.js",
+    "test.js"
+  ],
+  "engines": {
+    "node": ">=4"
+  },
+  "keywords": [
+    "require",
+    "global",
+    "modules"
+  ]
+}
