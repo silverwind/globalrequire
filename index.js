@@ -1,10 +1,10 @@
 "use strict";
 
-var exec = require("execa").shellSync;
-var resolve = require("path").resolve;
-var join = require("path").join;
-var validate = require("validate-npm-package-name");
 var fs = require("fs");
+var join = require("path").join;
+var resolve = require("path").resolve;
+var rc = require("rc");
+var validate = require("validate-npm-package-name");
 
 module.exports = function requireglobal(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
@@ -44,11 +44,13 @@ function req(dir) {
   return require(dir);
 }
 
-// for npm, we attempt to execute it to get the global module root. There
-// might be more efficient methods to be discovered
+// for npm, we extract the global folder from its config files
 function npmGlobalFolder() {
-  var result = exec("npm root -g");
-  if (result && result.stdout.length) return result.stdout.trim();
+  var prefix = rc("npm").prefix;
+  if (process.platform === "win32") {
+    prefix = prefix || join(process.env.APPDATA, "npm");
+  }
+  return join(prefix, "lib", "node_modules");
 }
 
 // yarn pretty much hardcodes the global module folder, we mostly replicate the

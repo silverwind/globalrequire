@@ -9,7 +9,7 @@
     "test": "node test.js"
   },
   "dependencies": {
-    "execa": "^0.5.0",
+    "rc": "^1.1.6",
     "user-home": "^2.0.0",
     "validate-npm-package-name": "^2.2.2"
   },
