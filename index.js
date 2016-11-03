@@ -24,14 +24,14 @@ module.exports.resolve = function resolve(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
   var modulePath;
 
-  modulePath = join(yarnGlobalFolder(), request);
   try {
+    modulePath = join(yarnGlobalFolder(), request);
     req(modulePath);
     return modulePath;
   } catch (err) {}
 
-  modulePath = join(npmGlobalFolder(), request);
   try {
+    modulePath = join(npmGlobalFolder(), request);
     req(modulePath);
     return modulePath;
   } catch (err) {}
@@ -44,31 +44,25 @@ function req(dir) {
   return require(dir);
 }
 
-// for npm, we can simply parse the global module folder from its help message
+// for npm, we attempt to execute it to get the global module root. There
+// might be more efficient methods to be discovered
 function npmGlobalFolder() {
-  var result = exec("npm");
-  if (result && result.stdout && result.stdout.length) {
-    var path = (/npm@[^ ]+ (.+)/i.exec(result.stdout) || [])[1];
-    if (path) return join(path, "..");
-  }
-  return null;
+  var result = exec("npm root -g");
+  if (result && result.stdout.length) return result.stdout.trim();
 }
 
 // yarn pretty much hardcodes the global module folder, we mostly replicate the
 // checks from https://github.com/yarnpkg/yarn/blob/master/src/constants.js to
 // resolve the global folder in a similar fashion like they do
 function yarnGlobalFolder() {
-  var result = exec("yarn --version");
-  if (/^v?\d+\.\d+\.\d+/gm.test(result.stdout.trim())) {
-    var userHome = require("user-home");
-    if (process.platform === "linux" && process.env.USER === "root") {
-      userHome = resolve("/usr/local/share");
-    }
-    if (process.platform === "win32" && process.env.LOCALAPPDATA) {
-      return join(process.env.LOCALAPPDATA, "Yarn", "global", "node_modules");
-    }
-    return join(userHome, ".yarn-config", "global", "node_modules");
+  var userHome = require("user-home");
+  if (process.platform === "linux" && process.env.USER === "root") {
+    userHome = resolve("/usr/local/share");
   }
+  if (process.platform === "win32" && process.env.LOCALAPPDATA) {
+    return join(process.env.LOCALAPPDATA, "Yarn", "global", "node_modules");
+  }
+  return join(userHome, ".yarn-config", "global", "node_modules");
 }
 
 function isReadableFolder(path) {
