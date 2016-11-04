@@ -2,8 +2,9 @@
 
 var fs = require("fs");
 var join = require("path").join;
-var resolve = require("path").resolve;
+var os = require("os");
 var rc = require("rc");
+var resolve = require("path").resolve;
 var validate = require("validate-npm-package-name");
 
 module.exports = function requireglobal(request) {
@@ -39,7 +40,7 @@ module.exports.resolve = function resolve(request) {
 // for yarn we replicate the checks from
 // https://github.com/yarnpkg/yarn/blob/master/src/constants.js
 function yarnGlobalFolder() {
-  var userHome = require("user-home");
+  var userHome = os.homedir();
   if (process.platform === "linux" && process.env.USER === "root") {
     userHome = resolve("/usr/local/share");
   }
