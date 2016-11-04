@@ -1,7 +1,7 @@
 # globalrequire [![NPM version](https://img.shields.io/npm/v/globalrequire.svg?style=flat)](https://www.npmjs.org/package/globalrequire) [![Dependency Status](http://img.shields.io/david/silverwind/globalrequire.svg?style=flat)](https://david-dm.org/silverwind/globalrequire)
 > require() globally installed modules
 
-`globalrequire` replicates `require` behaviour but for global modules. Supports both [yarn](https://github.com/yarnpkg/yarn) and [npm](https://github.com/npm/npm)'s global locations, with a preference for yarn when in conflict. Will not attempt to do any fallback to local modules or `NODE_PATH`.
+`globalrequire` is like `require` but for globally installed modules. Supports both [yarn](https://github.com/yarnpkg/yarn) and [npm](https://github.com/npm/npm)'s global locations, with a preference for yarn when in conflict. Will not attempt to do any fallback to local modules or `NODE_PATH`.
 
 ## Installation
 ```console
