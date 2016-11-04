@@ -2,9 +2,14 @@
 
 // `oui`should be installed globall through yarn
 
-var assert = require("assert");
-var globalrequire = require(".");
+const assert = require("assert");
+const m = require(".");
 
-assert.ok(globalrequire("npm").version);
-assert.ok(globalrequire("oui"));
-assert.ok(globalrequire.resolve("npm"));
+assert.ok(m("npm").version);
+assert.ok(m("oui"));
+assert.ok(m.resolve("npm"));
+
+assert.throws(() => { m("."); });
+assert.throws(() => { m("/"); });
+assert.throws(() => { m("./relative"); });
+assert.throws(() => { m("./relative.js"); });
