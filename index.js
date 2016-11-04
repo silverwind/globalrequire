@@ -1,11 +1,11 @@
 "use strict";
 
-var fs = require("fs");
-var join = require("path").join;
-var os = require("os");
-var rc = require("rc");
-var resolve = require("path").resolve;
-var validate = require("validate-npm-package-name");
+const fs = require("fs");
+const join = require("path").join;
+const os = require("os");
+const rc = require("rc");
+const resolve = require("path").resolve;
+const validate = require("validate-npm-package-name");
 
 module.exports = function requireglobal(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
@@ -72,6 +72,6 @@ function isReadableFolder(path) {
 }
 
 function isValidRequest(request) {
-  var result = validate(request);
+  const result = validate(request);
   return result.validForNewPackages || result.validForOldPackages;
 }
