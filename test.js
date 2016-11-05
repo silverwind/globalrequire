@@ -1,12 +1,12 @@
 "require strict";
 
-// `oui`should be installed globall through yarn
+// eslint must be installed globally for this test to pass
 
 const assert = require("assert");
 const m = require(".");
 
 assert.ok(m("npm").version);
-assert.ok(m("oui"));
+assert.ok(m("eslint"));
 assert.ok(m.resolve("npm"));
 
 assert.throws(() => { m("."); });

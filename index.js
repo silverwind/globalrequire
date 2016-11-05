@@ -1,26 +1,16 @@
 "use strict";
 
-const fs = require("fs");
-const join = require("path").join;
-const os = require("os");
-const rc = require("rc");
-const resolve = require("path").resolve;
+const fs       = require("fs");
+const join     = require("path").join;
+const os       = require("os");
+const rc       = require("rc");
+const resolve  = require("path").resolve;
 const validate = require("validate-npm-package-name");
 
 module.exports = function requireglobal(request) {
   if (!isValidRequest(request)) throw new Error("Invalid request: " + request);
-  var modulePath;
-
-  modulePath = join(yarnGlobalFolder(), request);
-  try {
-    return require(modulePath);
-  } catch (err) {}
-
-  modulePath = join(npmGlobalFolder(), request);
-  try {
-    return require(modulePath);
-  } catch (err) {}
-
+  try { return require(join(yarnGlobalFolder(), request)); } catch (err) {}
+  try { return require(join(npmGlobalFolder(), request)); } catch (err) {}
   throw new Error("Cannot find module: '" + request + "'");
 };
 
